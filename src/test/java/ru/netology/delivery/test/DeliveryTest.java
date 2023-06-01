@@ -29,13 +29,17 @@ class DeliveryTest {
         var daysToAddForSecondMeeting = 7;
         var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
         Configuration.holdBrowserOpen = true;
-        $("[data-test-id='city'] input").setValue(DataGenerator.generateCity("ru"));
+        $("[data-test-id='city'] input").setValue(validUser.getCity());
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME),Keys.DELETE);
         $("[data-test-id='date'] input").setValue(firstMeetingDate);
-        $("[data-test-id='name'] input").setValue(DataGenerator.generateName("ru"));
-        $("[name='phone']").setValue(DataGenerator.generatePhone("ru"));
+        $("[data-test-id='name'] input").setValue(validUser.getName());
+        $("[name='phone']").setValue(validUser.getPhone());
         $("[data-test-id='agreement']").click();
         $$("button").find(exactText("Запланировать")).click();
+        $(byText("Успешно!")).shouldBe(visible);
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate))
+                .shouldBe(visible);
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME),Keys.DELETE);
         $("[data-test-id='date'] input").setValue(secondMeetingDate);
         $$("button").find(exactText("Запланировать")).click();
